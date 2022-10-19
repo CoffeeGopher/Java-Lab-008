@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ public enum MorseCode {
     }
 
 
-    public static @Nullable MorseCode fromChar(char c) {
+    public static MorseCode fromChar(char c) {
         try {
             return MorseCode.valueOf(String.valueOf(c).toUpperCase());
         } catch (IllegalArgumentException e) {
