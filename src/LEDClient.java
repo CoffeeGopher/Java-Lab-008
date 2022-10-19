@@ -108,9 +108,9 @@ public class LEDClient {
 //            ledClient.blinkN(color, 5, 1000);
             ledClient.rainbowCycle(3);
             TimeUnit.SECONDS.sleep(3);
-            ledClient.displayMorseCode("SOS", 250);
+            ledClient.displayMorseCode("SOS", 250, new int[] {255, 0, 0});
             TimeUnit.SECONDS.sleep(3);
-            ledClient.displayMorseCode("hello world", 250);
+            ledClient.displayMorseCode("hello world", 250, new int[] {0, 255, 0});
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
