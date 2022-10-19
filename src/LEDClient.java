@@ -38,61 +38,20 @@ public class LEDClient {
         }
     }
 
-    public void rainbowCycle(int cycles) throws InterruptedException {
+    public void rainbowCycle(int cycles, int phases, int delay) throws InterruptedException {
         int[] color = {0,255,255};
+        final float phasesMinusOne = phases - 1;
         for (int cyclesPassed = 0; cyclesPassed < cycles; cyclesPassed++) {
             for (int i = 0; i < 3; i++) {
-                for (int ii = 0; ii < 7; ii++) {
-                    color[i] = (int) ((255 / 6.0) * ii);
-                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / 6.0) * ii);
+                for (int ii = 0; ii < phases; ii++) {
+                    color[i] = (int) ((255 / phasesMinusOne) * ii);
+                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / phasesMinusOne) * ii);
                     send(color);
-                    TimeUnit.MILLISECONDS.sleep(70);
+                    TimeUnit.MILLISECONDS.sleep(delay);
                 }
             }
         }
         send(OFF);
-    }
-
-    public void displayMorseCode(String message, int ditTime) throws InterruptedException {
-        displayMorseCode(message, ditTime, new int[] {255,255,255});
-    }
-
-    public void displayMorseCode(String message, int ditTime, int[] color) throws InterruptedException {
-
-        for (char c : message.toCharArray()) {
-            if (c == ' ') {
-                // word space
-                TimeUnit.MILLISECONDS.sleep(ditTime * 7);
-                continue;
-            }
-
-            MorseCode morse = MorseCode.fromChar(c);
-            if (morse == null) {
-                // skip if char is not a valid morse code
-                continue;
-            }
-
-            // process char
-            for(int morseValue : morse.getMorseCodeArray()) {
-                if (morseValue == 0) {
-                    // dit
-                    send(color);
-                    TimeUnit.MILLISECONDS.sleep(ditTime);
-                    send(OFF);
-                    TimeUnit.MILLISECONDS.sleep(ditTime);
-                } else {
-                    send(color);
-                    TimeUnit.MILLISECONDS.sleep(ditTime * 3);
-                    send(OFF);
-                    TimeUnit.MILLISECONDS.sleep(ditTime);
-                }
-            }
-            TimeUnit.MILLISECONDS.sleep(ditTime * 3);
-
-        }
-
-        send(OFF);
-
     }
 
     public void close() throws InterruptedException {
@@ -106,11 +65,7 @@ public class LEDClient {
         try {
 //            int[] color = {0, 0, 255};
 //            ledClient.blinkN(color, 5, 1000);
-            ledClient.rainbowCycle(3);
-            TimeUnit.SECONDS.sleep(3);
-            ledClient.displayMorseCode("SOS", 250, new int[] {255, 0, 0});
-            TimeUnit.SECONDS.sleep(3);
-            ledClient.displayMorseCode("hello world", 250, new int[] {0, 255, 0});
+            ledClient.rainbowCycle(10, 7, 70);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
