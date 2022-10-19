@@ -38,14 +38,14 @@ public class LEDClient {
         }
     }
 
-    public void rainbowCycle(int cycles, int phases, int delay) throws InterruptedException {
-        int[] color = {0,255,255};
+    public void rainbowCycle(int cycles, int phases, int delay, int minimum, int maximum) throws InterruptedException {
+        int[] color = {minimum,maximum,maximum};
         final float phasesMinusOne = phases - 1;
         for (int cyclesPassed = 0; cyclesPassed < cycles; cyclesPassed++) {
             for (int i = 0; i < 3; i++) {
                 for (int ii = 0; ii < phases; ii++) {
-                    color[i] = (int) ((255 / phasesMinusOne) * ii);
-                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / phasesMinusOne) * ii);
+                    color[i] = minimum + (int) (((maximum - minimum) / phasesMinusOne) * ii);
+                    color[i == 2 ? 0 : i + 1] = maximum - (int) (((maximum - minimum) / phasesMinusOne) * ii);
                     send(color);
                     TimeUnit.MILLISECONDS.sleep(delay);
                 }
@@ -65,7 +65,7 @@ public class LEDClient {
         try {
 //            int[] color = {0, 0, 255};
 //            ledClient.blinkN(color, 5, 1000);
-            ledClient.rainbowCycle(10, 7, 70);
+            ledClient.rainbowCycle(10, 5, 50, 150, 255);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
