@@ -89,6 +89,8 @@ public class LEDClient {
 
         }
 
+        send(OFF);
+
     }
 
     public void close() throws InterruptedException {
@@ -102,7 +104,8 @@ public class LEDClient {
         try {
 //            int[] color = {0, 0, 255};
 //            ledClient.blinkN(color, 5, 1000);
-            ledClient.rainbowCycle(10);
+            ledClient.rainbowCycle(3);
+            ledClient.displayMorseCode("SOS", 250);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
