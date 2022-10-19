@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public enum MorseCode {
     // 0 is a dot, 1 is a dash
     A(0,1),

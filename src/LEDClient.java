@@ -44,12 +44,13 @@ public class LEDClient {
             for (int i = 0; i < 3; i++) {
                 for (int ii = 0; ii < 255; ii++) {
                     color[i]++;
-                    color[i == 3 ? 0 : i + 1]++;
+                    color[i == 2 ? 0 : i + 1]--;
                     send(color);
                     TimeUnit.MILLISECONDS.sleep(10);
                 }
             }
         }
+        send(LEDClient.OFF);
     }
 
     public void displayMorseCode(String message, int ditTime) {
@@ -68,7 +69,7 @@ public class LEDClient {
     }
 
     public static void main(String[] args) {
-        LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
+        LEDClient ledClient = new LEDClient("tcp", "192.168.1.117", 5001);
         try {
 //            int[] color = {0, 0, 255};
 //            ledClient.blinkN(color, 5, 1000);
