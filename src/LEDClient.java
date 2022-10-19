@@ -42,11 +42,11 @@ public class LEDClient {
         int[] color = {0,255,255};
         for (int cyclesPassed = 0; cyclesPassed < cycles; cyclesPassed++) {
             for (int i = 0; i < 3; i++) {
-                for (int ii = 0; ii < 16; ii++) {
-                    color[i] = (int) ((255 / 15.0) * ii);
-                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / 15.0) * ii);
+                for (int ii = 0; ii < 7; ii++) {
+                    color[i] = (int) ((255 / 6.0) * ii);
+                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / 6.0) * ii);
                     send(color);
-                    TimeUnit.MILLISECONDS.sleep(160);
+                    TimeUnit.MILLISECONDS.sleep(70);
                 }
             }
         }
