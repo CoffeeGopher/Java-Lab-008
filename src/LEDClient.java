@@ -42,11 +42,11 @@ public class LEDClient {
         int[] color = {0,255,255};
         for (int cyclesPassed = 0; cyclesPassed < cycles; cyclesPassed++) {
             for (int i = 0; i < 3; i++) {
-                for (int ii = 0; ii < 255; ii++) {
-                    color[i]++;
-                    color[i == 2 ? 0 : i + 1]--;
+                for (int ii = 0; ii < 16; ii++) {
+                    color[i] = (int) ((255 / 15.0) * ii);
+                    color[i == 2 ? 0 : i + 1] = 255 - (int) ((255 / 15.0) * ii);
                     send(color);
-                    TimeUnit.MILLISECONDS.sleep(10);
+                    TimeUnit.MILLISECONDS.sleep(160);
                 }
             }
         }
@@ -83,6 +83,8 @@ public class LEDClient {
                 } else {
                     send(color);
                     TimeUnit.MILLISECONDS.sleep(ditTime * 3);
+                    send(OFF);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
                 }
             }
             TimeUnit.MILLISECONDS.sleep(ditTime * 3);
@@ -100,7 +102,7 @@ public class LEDClient {
     }
 
     public static void main(String[] args) {
-        LEDClient ledClient = new LEDClient("tcp", "192.168.1.117", 5001);
+        LEDClient ledClient = new LEDClient("tcp", "localhost", 5001);
         try {
 //            int[] color = {0, 0, 255};
 //            ledClient.blinkN(color, 5, 1000);
