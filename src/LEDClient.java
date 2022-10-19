@@ -38,6 +38,29 @@ public class LEDClient {
         }
     }
 
+    public void rainbowCycle(int cycles) throws InterruptedException {
+        int[] color = {0,255,255};
+        for (int cyclesPassed = 0; cyclesPassed < cycles; cyclesPassed++) {
+            for (int i = 0; i < 3; i++) {
+                for (int ii = 0; ii < 255; ii++) {
+                    color[i]++;
+                    color[i == 3 ? 0 : i + 1]++;
+                    send(color);
+                    TimeUnit.MILLISECONDS.sleep(10);
+                }
+            }
+        }
+    }
+
+    public void displayMorseCode(String message, int ditTime) {
+        displayMorseCode(message, ditTime, new int[] {255,255,255});
+    }
+
+    public void displayMorseCode(String message, int ditTime, int[] color) {
+
+
+    }
+
     public void close() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2); // Allow the socket a chance to flush.
         this.zsocket.close();
@@ -47,8 +70,9 @@ public class LEDClient {
     public static void main(String[] args) {
         LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
         try {
-            int[] color = {0, 0, 255};
-            ledClient.blinkN(color, 5, 1000);
+//            int[] color = {0, 0, 255};
+//            ledClient.blinkN(color, 5, 1000);
+            ledClient.rainbowCycle(10);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
