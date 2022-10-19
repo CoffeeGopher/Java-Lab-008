@@ -50,15 +50,44 @@ public class LEDClient {
                 }
             }
         }
-        send(LEDClient.OFF);
+        send(OFF);
     }
 
-    public void displayMorseCode(String message, int ditTime) {
+    public void displayMorseCode(String message, int ditTime) throws InterruptedException {
         displayMorseCode(message, ditTime, new int[] {255,255,255});
     }
 
-    public void displayMorseCode(String message, int ditTime, int[] color) {
+    public void displayMorseCode(String message, int ditTime, int[] color) throws InterruptedException {
 
+        for (char c : message.toCharArray()) {
+            if (c == ' ') {
+                // word space
+                TimeUnit.MILLISECONDS.sleep(ditTime * 7);
+                continue;
+            }
+
+            MorseCode morse = MorseCode.fromChar(c);
+            if (morse == null) {
+                // skip if char is not a valid morse code
+                continue;
+            }
+
+            // process char
+            for(int morseValue : morse.getMorseCodeArray()) {
+                if (morseValue == 0) {
+                    // dit
+                    send(color);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
+                    send(OFF);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
+                } else {
+                    send(color);
+                    TimeUnit.MILLISECONDS.sleep(ditTime * 3);
+                }
+            }
+            TimeUnit.MILLISECONDS.sleep(ditTime * 3);
+
+        }
 
     }
 

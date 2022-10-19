@@ -1,7 +1,10 @@
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public enum MorseCode {
-    // 0 is a dot, 1 is a dash
+    // 0 is a dit, 1 is a dah
     A(0,1),
     B(1,0,0,0),
     C(1,0,1,0),
@@ -49,5 +52,37 @@ public enum MorseCode {
 
     public int[] getMorseCodeArray() {
         return morseCode;
+    }
+
+
+    public static @Nullable MorseCode fromChar(char c) {
+        try {
+            return MorseCode.valueOf(String.valueOf(c).toUpperCase());
+        } catch (IllegalArgumentException e) {
+            switch (c) {
+                case '1':
+                    return ONE;
+                case '2':
+                    return TWO;
+                case '3':
+                    return THREE;
+                case '4':
+                    return FOUR;
+                case '5':
+                    return FIVE;
+                case '6':
+                    return SIX;
+                case '7':
+                    return SEVEN;
+                case '8':
+                    return EIGHT;
+                case '9':
+                    return NINE;
+                case '0':
+                    return ZERO;
+                default:
+                    return null;
+            }
+        }
     }
 }
