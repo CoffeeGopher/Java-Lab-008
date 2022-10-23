@@ -58,6 +58,48 @@ public class LEDClient {
         send(OFF);
     }
 
+    public void displayMorseCode(String message, int ditTime) throws InterruptedException {
+        displayMorseCode(message, ditTime, new int[] {255,255,255});
+    }
+
+    public void displayMorseCode(String message, int ditTime, int[] color) throws InterruptedException {
+
+        for (char c : message.toCharArray()) {
+            if (c == ' ') {
+                // word space
+                TimeUnit.MILLISECONDS.sleep(ditTime * 7);
+                continue;
+            }
+
+            MorseCode morse = MorseCode.fromChar(c);
+            if (morse == null) {
+                // skip if char is not a valid morse code
+                continue;
+            }
+
+            // process char
+            for(int morseValue : morse.getMorseCodeArray()) {
+                if (morseValue == 0) {
+                    // dit
+                    send(color);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
+                    send(OFF);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
+                } else {
+                    send(color);
+                    TimeUnit.MILLISECONDS.sleep(ditTime * 3);
+                    send(OFF);
+                    TimeUnit.MILLISECONDS.sleep(ditTime);
+                }
+            }
+            TimeUnit.MILLISECONDS.sleep(ditTime * 3);
+
+        }
+
+        send(OFF);
+
+    }
+
     public void close() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2); // Allow the socket a chance to flush.
         this.zsocket.close();
@@ -67,8 +109,9 @@ public class LEDClient {
     public static void main(String[] args) {
         LEDClient ledClient = new LEDClient("tcp", "localhost", 5001);
         try {
-//            int[] color = {0, 0, 255};
-//            ledClient.blinkN(color, 5, 1000);
+            // display "SOS" in red
+            ledClient.displayMorseCode("SOS", 500, new int[] {255, 0, 0});
+            // show some pretty rainbow colors
             ledClient.rainbowCycle(10, 5, 50, 0, 255);
             ledClient.close();
         } catch (InterruptedException e) {
